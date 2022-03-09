@@ -40,10 +40,10 @@ router.get('/community', (req, res, next) => {
 // GET /community/:postId
 // authenticated route
 
-router.get('/community/:postId', (req, res, next) => {
+router.get('/community/:postId', requireToken, (req, res, next) => {
   Post.findById(req.params.postId)
     .then(post => {
-      res.status(200).json({post})
+      res.status(200).json({ post })
     })
     .catch(next)
 })
@@ -52,7 +52,7 @@ router.get('/community/:postId', (req, res, next) => {
 // PATCH /community/:postId
 // authenticated route
 
-router.patch('/community/:postId/edit', requireToken, (req, res, next) => {
+router.patch('/community/:postId', requireToken, (req, res, next) => {
   // this makes sure a user doesn't update the owner property of a resource
   delete req.body.post.owner
   Post.findByIdAndUpdate(req.params.postId, req.body.post, {new: true})
